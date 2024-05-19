@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "hatchet_mobile",
+    "slug": "hatchet_mobile",
+    "version": "1.0.0",
+    "android": {
+      "package": "com.anonymous.hatchet_mobile"
+    }
+  },
+  "name": "hatchet_mobile"
+}
