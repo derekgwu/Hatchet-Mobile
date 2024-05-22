@@ -3,7 +3,7 @@ import { View, Image, Text, StyleSheet, ActivityIndicator, Button, TouchableOpac
 import { WebView } from 'react-native-webview';
 
 
-const Custom = ({navigation, route}) => {
+const Main = ({navigation, route}) => {
   const {link} = route.params
   const [isJavaScriptInjected, setIsJavaScriptInjected] = useState(false);
   const [canGoBack, setCanGoBack] = useState(false);
@@ -98,6 +98,7 @@ const Custom = ({navigation, route}) => {
           <Text>Loading...</Text>
         </View>
       )}
+
       <WebView
         ref={webViewRef}
         source={{ uri: mainUrl }}
@@ -219,4 +220,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Custom;
+export default Main;

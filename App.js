@@ -3,6 +3,8 @@ import { View, Text, StyleSheet } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Main from "./screens/main.js";
+import SearchPage from "./screens/search.js"
+import Custom from "./screens/custom.js"
 
 const Stack = createNativeStackNavigator();
 
@@ -14,6 +16,9 @@ const App = () => {
         <Stack.Screen name="News" component={Main} initialParams={{ link: 'https://gwhatchet.com/category/news/' }}/>
         <Stack.Screen name="Multimedia" component={Main} initialParams={{ link: 'https://gwhatchet.com/category/photo/' }}/>
         <Stack.Screen name="Podcasts" component={Main} initialParams={{ link: 'https://gwhatchet.com/category/podcasts/' }}/>
+        <Stack.Screen name="Search" component={SearchPage} />
+        <Stack.Screen name="Custom" component={Custom}/>
+
       </Stack.Navigator>
     </NavigationContainer>
     

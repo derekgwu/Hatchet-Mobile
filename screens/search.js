@@ -1,65 +1,23 @@
 import React, { useState, useRef } from 'react';
-import { View, Image, Text, StyleSheet, ActivityIndicator, Button, TouchableOpacity } from 'react-native';
+import { View, Image, Text, StyleSheet, ActivityIndicator, Button, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 
-const Custom = ({navigation, route}) => {
-  const {link} = route.params
-  const [isJavaScriptInjected, setIsJavaScriptInjected] = useState(false);
-  const [canGoBack, setCanGoBack] = useState(false);
-  const mainUrl = link;
-  const [current_link] = useState(link)
+const SearchPage = ({navigation}) => {
+
   const webViewRef = useRef(null);
-  const goback = () => {
-    if(webViewRef == null){
-      console.log("here")
-    }
-    webViewRef.current.goBack();
+  const [inputValue, setInputValue] = useState('');
+
+  const handleInputChange = (text) => {
+    setInputValue(text);
   };
-  const [isLoading, setIsLoading] = useState(true);
 
-  const inject = `
-    (function() {
-      const section = document.getElementsByClassName('sno-footer-credit-inner')
-      section[0].style.display = "none"
-
-      const section2 = document.getElementsByClassName('sno-designer-area-row sno-designer-area-row-mobile-1')
-      section2[0].style.display = "none"
-
-      const hide4 = document.getElementById('mobilehomepage')
-      const sections = hide4.querySelectorAll('section')
-      
-      sections[6].style.display = "none"
-      sections[7].style.display = "none"
-
+  const handleButtonPress = () => {
+    console.log(inputValue);
+    const link = "https://gwhatchet.com/?s=" + inputValue
+    navigation.navigate("Custom", {link: link})
+  };
   
-    })();
-    true;
-  `;
-
-  
-
-  const navigateBack = () => {
-    if (webViewRef.current) {
-      webViewRef.current.goBack();
-    } else {
-      webViewRef.current.loadUrl(mainUrl);
-    }
-  };
-
-
-  const onNavigationStateChange = (navState) => {
-    // Reset the JavaScript injected state when navigation changes
-    setIsJavaScriptInjected(false);
-    setIsLoading(true);
-    if (navState.nativeEvent.url === mainUrl) {
-      setCanGoBack(false); 
-    } else {
-
-      setCanGoBack(true); 
-    }
-    
-  };
 
   const navigate_to_page = (screenName) => {
     navigation.navigate(screenName)
@@ -67,46 +25,25 @@ const Custom = ({navigation, route}) => {
 
 
 
-  const onPageLoad = () => {
-    // JavaScript injection is complete
-    setIsJavaScriptInjected(true);
-    
-    // Show content after a brief delay
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 500); // Adjust the delay as needed
-  };
-  const back_text = "<"
 
   return (
     <View style={styles.main}>
       <View style={styles.banner}>
-        <View style={styles.backButtonContainer}>
-        {canGoBack && (
-          <TouchableOpacity onPress={goback}>
-            <Image source={require('./images/back_arrow.png')} style={styles.back} />
-          </TouchableOpacity>
-        )}
-            
-     
-        </View>
         <Image source={require('./images/hatchet_logo.png')} style={styles.logo} />
       </View>
-      {!isJavaScriptInjected && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="256" color="#033b59" />
-          <Text>Loading...</Text>
-        </View>
-      )}
-      <WebView
-        ref={webViewRef}
-        source={{ uri: mainUrl }}
-        injectedJavaScript={inject}
-        onLoad={onPageLoad}
-        onLoadProgress={onNavigationStateChange}
-
-        style={{ flex: isJavaScriptInjected ? 1 : 0, opacity: isJavaScriptInjected ? 1 : 0 }}
+      <ScrollView style={styles.search}>
+        <Text style={styles.heading}>Search</Text>
+        <TextInput
+        style={styles.input}
+        placeholder="Search By Topic"
+        value={inputValue}
+        onSubmitEditing={handleButtonPress}
+        onChangeText={handleInputChange}
       />
+      </ScrollView>
+
+      
+      
       <View style={styles.footer}>
       <TouchableOpacity onPress={() => navigate_to_page("Main")}>
           <View style={styles.footer_btn}>
@@ -135,7 +72,7 @@ const Custom = ({navigation, route}) => {
             <Text style={styles.footer_text}>Podcasts</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigate_to_page("Search")}>
+        <TouchableOpacity>
           <View style={styles.footer_btn}>
             <Image source={require('./images/search.png')} style={styles.footer_img}></Image>
             <Text style={styles.footer_text}>Search</Text>
@@ -164,6 +101,8 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   footer: {
+    position: "absolute",
+    bottom: 0,
     width: '100%',
     height: '7%',
     padding: "1%",
@@ -216,7 +155,21 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     width: 40,
     height: 40,
+  },
+  search : { 
+    width: "90%",
+    padding: "5%",
+  },
+  input : {
+    backgroundColor: "gray",
+    padding: 5,
+    borderRadius: 10
+  },
+  heading : {
+    fontSize: 24,
+    marginBottom: "5%",
+    fontWeight: "bold"
   }
 });
 
-export default Custom;
+export default SearchPage;
